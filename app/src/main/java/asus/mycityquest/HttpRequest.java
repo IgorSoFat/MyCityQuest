@@ -1,84 +1,99 @@
 package asus.mycityquest;
 
 import android.os.Build;
-import android.support.annotation.RequiresApi;
+import android.util.Log;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.StatusLine;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 /**
  * Created by ASUS on 04/06/2018.
  */
 
 public class HttpRequest {
-    protected static String base = "http://51.38.234.47/html/MyCityQuest/html";
+    protected static String base = "http://robin-dupret.com:4000";
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public String egergetg(String url) throws IOException {
-        InputStream is = null;
-        String full_url = String.join("/", base, url);
+    /**
+     * Permet de réaliser une requête GET vers le site et de récupérer
+     * la réponse sous forme de chaîne de caractères.
+     *
+     * @param endpoint - Endpoint du site auquel accéder
+     * @return Réponse du serveur (format JSON en principe)
+     * @throws IOException
+     */
 
-        try {
-            final HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
-            conn.setReadTimeout(10000); //milliseconds
-            conn.setConnectTimeout(15000); //milliseconds
-            conn.setRequestMethod("GET");
-            conn.setDoInput(true);
-            conn.connect();
-            is = conn.getInputStream();
-            //Lis l'inputstream et le save dans une string
-            return readIt(is);
-        } finally {
-            //Bien fermer le InputStream
-            if (is != null) {
-                is.close();
-            }
-        }
-        /*
-        // Ici le `HttpGet` peut être changé par autre chose si vous voulez
-        // définir une méthode pour chaque verbe HTTP
-        HttpResponse response = httpClient.execute(new HttpGet(full_url));
+    public String get(String endpoint) throws IOException {
+        HttpResponse response = new DefaultHttpClient().execute(new HttpGet(fullUrl(endpoint)));
         StatusLine statusLine = response.getStatusLine();
 
         if (statusLine.getStatusCode() == HttpStatus.SC_OK){
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-
-            response.getEntity().writeTo(out);
-
-            String responseString = out.toString();
-
-            out.close();
-
-            // A partir d'ici, vous avez accès à la chaîne de caractères
-            // qui a été renvoyé par votre méthode
-            return responseString;
+            return getOut(response);
         } else {
             response.getEntity().getContent().close();
+
             throw new IOException(statusLine.getReasonPhrase());
         }
-*/
+    }
+
+    /**
+     * Permet de réaliser une requête POST vers le site en spécifiant un corps
+     * pour la requête (au format JSON) et de récupérer la réponse sous forme
+     * de chaînes de caractères.
+     *
+     * Le cast en objet java (vraissemblalement JSONArray ou JSONObject) doit se
+     * faire à partir de la chaîne renvoyée et dans le code faisant appel à cette
+     * méthode.
+     *
+     * @param endpoint - Endpoint du site auquel accéder
+     * @param body     - Objet JSON à définir en tant que corps de la requête ou null
+     * @return Réponse du serveur (format JSON en principe)
+     */
+    public String post(String endpoint, JSONObject body) throws IOException {
+        HttpPost post = new HttpPost(fullUrl(endpoint));
+
+        HttpEntity entity = new ByteArrayEntity(xml.getBytes("UTF-8"));
+        post.setEntity(entity);
+        HttpResponse response = new DefaultHttpClient().execute(post);
+        StatusLine statusLine = response.getStatusLine();
+
+        if (statusLine.getStatusCode() == HttpStatus.SC_OK) {
+            return getOut(response);
+        } else {
+            response.getEntity().getContent().close();
+
+            Log.i("Erreur de call HTTP :", statusLine.getReasonPhrase());
+        }
     }
 
 
-    private String readIt(InputStream is) throws IOException {
-        BufferedReader r = new BufferedReader(new InputStreamReader(is));
-        StringBuilder response = new StringBuilder();
-        String line;
-        while ((line = r.readLine()) != null) {
-            response.append(line).append('\n');
-        }
-        return response.toString();
+    protected String fullUrl(String endpoint) {
+        return base + "/" + endpoint;
+    }
+
+    /**
+     * Permet de récupérer le résultat (i.e. body) d'une réponse HTTP
+     * sous forme de chaîne de caractères.
+     *
+     * @param response - La réponse HTTP d'un call précédent
+     * @return Body de la réponse (au format JSON en principe)
+     */
+    protected String getOut(HttpResponse response) throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+        response.getEntity().writeTo(out);
+        String responseString = out.toString();
+        out.close();
+
+        return responseString;
     }
 }
