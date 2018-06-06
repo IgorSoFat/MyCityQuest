@@ -28,10 +28,9 @@
             android:name=".IndexActivity"
             android:label="@string/title_activity_index"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".RegisterActivity"
-            android:label="@string/title_activity_register"
-            tools:ignore="DuplicateActivity"></activity>
+
+        <activity android:name=".RegisterActivity"
+            android:label="RegisterActivity"/>
     </application>
 
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>

@@ -1,4 +1,6 @@
 package asus.mycityquest;
+
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -15,7 +17,7 @@ public class WebService {
     private String urlBase;
 
     public WebService() {
-        this("http://51.38.234.47/html/MyCityQuest/");
+        this("http://51.38.234.47/html/MyCityQuest/phpMobile");
     }
 
     public WebService(String url) {
@@ -39,7 +41,9 @@ public class WebService {
 
     public Boolean connect(String login, String password) throws Exception {
         String url = urlBase + "connexion.php?login=" + login + "&password=" + password;
-        if("true".equals(get(url))) {
+        JSONObject result = new JSONObject(get(url));
+        JSONArray reponse = result.getJSONArray("success");
+        if (reponse.get(0) == "1") {
             return true;
         } else return false;
     }
@@ -76,5 +80,7 @@ public class WebService {
         return new JSONObject(get(url));
     }
 
-    public JSONObject addLieu(){return null;}
+    public JSONObject addLieu() {
+        return null;
+    }
 }

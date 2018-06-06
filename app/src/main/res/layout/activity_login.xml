@@ -41,7 +41,8 @@
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:text="Login" />
+                    android:hint="@string/prompt_login"
+                    />
 
             </android.support.design.widget.TextInputLayout>
 
