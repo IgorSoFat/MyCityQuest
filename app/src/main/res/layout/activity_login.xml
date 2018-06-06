@@ -60,7 +60,8 @@
                     android:maxLines="1"
                     android:selectAllOnFocus="false"
                     android:singleLine="true"
-                    android:text="Mot de @string/error_incorrect_password" />
+                    android:hint="@string/prompt_password"
+                     />
 
             </android.support.design.widget.TextInputLayout>
 
