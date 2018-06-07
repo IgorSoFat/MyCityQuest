@@ -2,13 +2,13 @@ package asus.mycityquest;
 
 import android.util.Log;
 
-import org.apache.http.HttpResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -40,7 +40,16 @@ public class HttpRequest {
         URL url = new URL(urlToRead);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
-        BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+        InputStream in;
+        int status = conn.getResponseCode();
+
+        if(status >= HttpURLConnection.HTTP_OK)
+            in = conn.getErrorStream();
+        else
+            in = conn.getInputStream();
+
+        BufferedReader rd = new BufferedReader(new InputStreamReader(in));
         String line;
         while ((line = rd.readLine()) != null) {
             result.append(line);
@@ -53,27 +62,9 @@ public class HttpRequest {
         return base + "/" + endpoint;
     }
 
-    /**
-     * +     * Permet de récupérer le résultat (i.e. body) d'une réponse HTTP
-     * +     * sous forme de chaîne de caractères.
-     * +     *
-     * +     * @param response - La réponse HTTP d'un call précédent
-     * +     * @return Body de la réponse (au format JSON en principe)
-     * +
-     */
-    protected static String getOut(HttpResponse response) throws IOException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        response.getEntity().writeTo(out);
-        String responseString = out.toString();
-        out.close();
-
-        return responseString;
-    }
-
     public static String getLieu(String ville, String groupe) throws Exception {
         String url = base + "searchVilleByNameFilter.php?ville=" + ville + "&categorie=" + groupe;
         Log.e(TAG, url);
-        JSONObject resultat = new JSONObject(get(url));
 
         return get(url);
     }
