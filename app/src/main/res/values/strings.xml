@@ -14,7 +14,7 @@
     <string name="error_incorrect_password">Mot de passe incorrect</string>
     <string name="error_field_required">Champs requis</string>
     <string-array name="listType">
-        <item> Catégories </item>
+        <item>--Choisir--</item>
         <item>Administratif</item>
         <item>Commerce</item>
         <item>Restauration</item>

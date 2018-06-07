@@ -100,4 +100,10 @@ public class HttpRequest {
         Log.e(TAG, url);
         return get(url);
     }
+
+    public static String getAllAdress() throws Exception {
+        String url = base + "getAllAdress.php";
+        Log.e(TAG,url);
+        return get(url);
+    }
 }
