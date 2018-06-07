@@ -3,6 +3,7 @@ package asus.mycityquest;
 import android.util.Log;
 
 import org.apache.http.HttpResponse;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -101,9 +102,10 @@ public class HttpRequest {
         return get(url);
     }
 
-    public static String getAllAdress() throws Exception {
-        String url = base + "getAllAdress.php";
-        Log.e(TAG,url);
-        return get(url);
+    public static JSONArray getAllAdress() throws Exception {
+        String url = base + "getAllAdresse.php";
+        Log.e(TAG, url);
+        JSONArray jsonOArray = new JSONArray(get(url));
+        return jsonOArray;
     }
 }
