@@ -90,6 +90,15 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        Button mapTest =(Button) findViewById(R.id.mapTest);
+        mapTest.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent (LoginActivity.this, MapsActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
 

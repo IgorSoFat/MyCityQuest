@@ -24,8 +24,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginLeft="20dp"
         android:hint="@string/prompt_rechercherVille"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerGroupe"/>
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <ListView
         android:id="@+id/listLieux"
