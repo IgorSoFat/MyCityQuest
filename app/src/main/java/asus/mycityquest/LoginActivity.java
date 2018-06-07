@@ -29,6 +29,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,43 +50,18 @@ public class LoginActivity extends AppCompatActivity {
     private static final int REQUEST_READ_CONTACTS = 0;
 
     /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
-    /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     // UI references.
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
-    private View mProgressView;
-    private View mLoginFormView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        // Set up the login form.
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
 
+        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         mPasswordView = (EditText) findViewById(R.id.password);
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
-                    try {
-                        attemptLogin();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    return true;
-                }
-                return false;
-            }
-        });
 
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
@@ -93,7 +69,14 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 try {
                     attemptLogin();
+                    Toast.makeText(LoginActivity.this, "Connexion effecutée",
+                            Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(LoginActivity.this, IndexActivity.class);
+                    startActivity(intent);
+
                 } catch (Exception e) {
+                    Toast.makeText(LoginActivity.this, "La connexion a échoué ...",
+                            Toast.LENGTH_LONG).show();
                     e.printStackTrace();
                 }
             }
@@ -107,11 +90,60 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
     }
 
+
+    class RetrieveFeedTask extends AsyncTask<String, Void, String> {
+
+        private Exception exception;
+
+
+        protected String doInBackground(String... urls) {
+            try {
+                attemptLogin();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return "done";
+        }
+
+        protected void onPostExecute(String feed) {
+            // TODO: check this.exception
+            // TODO: do something with the feed
+        }
+
+        /**
+         * Attempts to sign in or register the account specified by the login form.
+         * If there are form errors (invalid email, missing fields, etc.), the
+         * errors are presented and no actual login attempt is made.
+         */
+        public void attemptRegister() throws Exception {
+            HttpRequest httpRequest = new HttpRequest();
+            // Reset errors.
+
+            // Store values at the time of the login attempt.
+            String email = mEmailView.getText().toString();
+            String password = mPasswordView.getText().toString();
+
+            boolean cancel = false;
+            View focusView = null;
+
+            // Check for a valid password, if the user entered one.
+        if (!TextUtils.isEmpty(password)) {
+            mPasswordView.setError(getString(R.string.error_invalid_password));
+            focusView = mPasswordView;
+            cancel = true;
+        }
+
+            if (cancel) {
+                // There was an error; don't attempt login and focus the first
+                // form field with an error.
+                focusView.requestFocus();
+            } else {
+                HttpRequest.connecter(email, password);
+        }
+        }
+    }
 
     /**
      * Attempts to sign in or register the account specified by the login form.
@@ -153,15 +185,7 @@ public class LoginActivity extends AppCompatActivity {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
 
-            if (HttpRequest.connecter(email, password)=="1") {
-                System.out.println("OK\n");
-                Intent intent = new Intent(LoginActivity.this, IndexActivity.class);
-                startActivity(intent);
-            } else {
-                System.out.println("Nop\n");
-                mEmailView.setError(null);
-                mPasswordView.setError(null);
-            }
+            new RetrieveFeedTask().execute("");
         }
     }
 }

@@ -75,16 +75,21 @@ public class HttpRequest {
         return responseString;
     }
 
-    public static String getLieu(int idLieu) throws Exception {
-        String url = base + "getlieu.php?id_lieu=" + idLieu;
+    public static String getLieu(String ville, String groupe) throws Exception {
+        String url = base + "searchVilleByNameFilter.php?ville=" + ville + "&categorie=" + groupe;
         Log.e(TAG, url);
+        JSONObject resultat = new JSONObject(get(url));
+
         return get(url);
     }
-
+// Voir si le status est à 1, on se log, si 0 on refuse le log, (voir dans class LoginActivity)
     public static String connecter(String login, String password) throws Exception {
         String url = base + "connexion.php?nomUtilisateur=" + login + "&motDePasse=" + password;
         Log.e(TAG, url);
-        return get(url);
+        JSONObject connexionStatus = new JSONObject(get(url));
+        String status = connexionStatus.getString("sucess");
+        Log.e(TAG,status);
+        return status;
     }
 
     public static String register(String login, String password, String nom, String prenom) throws Exception {

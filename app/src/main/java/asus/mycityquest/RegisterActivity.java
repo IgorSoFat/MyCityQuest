@@ -13,6 +13,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 import org.xml.sax.InputSource;
@@ -64,17 +65,21 @@ public class RegisterActivity extends AppCompatActivity {
         mEmailView = (TextView) findViewById(R.id.email);
         mPasswordView = (EditText) findViewById(R.id.password);
 
-
         Button mEmailRegisterButton = (Button) findViewById(R.id.email_valid_button);
         mEmailRegisterButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 try {
                     attemptRegister();
-                    Intent intent = new Intent(RegisterActivity.this, IndexActivity.class);
+                    Toast.makeText(RegisterActivity.this, "Utilisateur créé avec succès",
+                            Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                     startActivity(intent);
 
                 } catch (Exception e) {
+
+                    Toast.makeText(RegisterActivity.this, "La création a échoué ...",
+                            Toast.LENGTH_LONG).show();
                     e.printStackTrace();
                 }
             }
@@ -121,11 +126,11 @@ public class RegisterActivity extends AppCompatActivity {
             View focusView = null;
 
             // Check for a valid password, if the user entered one.
-        /*if (!TextUtils.isEmpty(password)) {
+        if (!TextUtils.isEmpty(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
-        }*/
+        }
 
             if (cancel) {
                 // There was an error; don't attempt login and focus the first
@@ -180,7 +185,6 @@ public class RegisterActivity extends AppCompatActivity {
             // perform the user login attempt.
 
             new RetrieveFeedTask().execute("");
-            System.out.println("OK\n");
         }
     }
 }
