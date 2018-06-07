@@ -1,15 +1,9 @@
 package asus.mycityquest;
 
+import android.nfc.Tag;
 import android.util.Log;
 
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.StatusLine;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -82,20 +76,28 @@ public class HttpRequest {
 
         return get(url);
     }
-// Voir si le status est à 1, on se log, si 0 on refuse le log, (voir dans class LoginActivity)
+
+    // Voir si le status est à 1, on se log, si 0 on refuse le log, (voir dans class LoginActivity)
     public static String connecter(String login, String password) throws Exception {
         String url = base + "connexion.php?nomUtilisateur=" + login + "&motDePasse=" + password;
         Log.e(TAG, url);
         JSONObject connexionStatus = new JSONObject(get(url));
         String status = connexionStatus.getString("sucess");
-        Log.e(TAG,status);
+        Log.e(TAG, status);
         return status;
     }
 
-    public static String register(String login, String password, String nom, String prenom) throws Exception {
+    public static String register(String login, String password, String nom, String prenom, String categorie) throws Exception {
         String url = base + "inscription.php?Nom=" + nom + "&Prenom=" + prenom + "&Login=" + login
-                + "&Password=" + password;
+                + "&Password=" + password + "&Categorie=" + categorie;
         Log.e(TAG, url);
+        return get(url);
+    }
+
+    public static String addLieu(String nom, String adresse, String ville, String categorie, String descriptif) throws Exception {
+        String url = base + "addLieu.php?Nom=" + nom + "&Adresse=" + adresse + "&Ville=" + ville
+                + "&Categorie=" + categorie + "&Descriptif=" + descriptif;
+        Log.e(TAG,url);
         return get(url);
     }
 }

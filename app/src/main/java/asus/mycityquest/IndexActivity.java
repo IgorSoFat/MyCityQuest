@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 public class IndexActivity extends AppCompatActivity {
 
@@ -33,5 +34,15 @@ public class IndexActivity extends AppCompatActivity {
         HttpRequest httpRequest = new HttpRequest();
 
 
+        FloatingActionButton addLieu = (FloatingActionButton) findViewById(R.id.addLieuButton);
+        //addLieu.bringToFront();
+        addLieu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(IndexActivity.this, "Clic !", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(IndexActivity.this,addLieuActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }

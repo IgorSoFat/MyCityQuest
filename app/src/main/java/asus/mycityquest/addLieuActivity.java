@@ -8,9 +8,11 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,7 +22,7 @@ import android.widget.Toast;
 /**
  * A login screen that offers login via email/password.
  */
-public class RegisterActivity extends AppCompatActivity {
+public class addLieuActivity extends AppCompatActivity {
 
     /**
      * Id to identity READ_CONTACTS permission request.
@@ -28,57 +30,51 @@ public class RegisterActivity extends AppCompatActivity {
     private static final int REQUEST_READ_CONTACTS = 0;
 
     /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
-    /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     // UI references.
     public TextView mNomView;
-    public TextView mPrenomView;
-    public TextView mEmailView;
-    public EditText mPasswordView;
-    public RadioButton mParticulier;
-    public RadioButton mPro;
-    public String mCategorie;
+    public TextView mAdresseView;
+    public TextView mVilleView;
+    public Spinner mCategorieSpinner;
+    public TextView mDescView;
 
-    public String TAG = "REGISTER ACTIVITY";
+    public String TAG = "AddLieu ACTIVITY";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.activity_addlieu);
+
+        Spinner mCategorieSpinner =(Spinner) findViewById(R.id.listType);
+
+        ArrayAdapter <CharSequence> adapter =
+                ArrayAdapter.createFromResource(this,R.array.listType,android.R.layout.
+                simple_spinner_item); 
 
         // Set up the login form.
-        mNomView = (TextView) findViewById(R.id.nomRegister);
-        mPrenomView = (TextView) findViewById(R.id.prenomRegister);
-        mEmailView = (TextView) findViewById(R.id.email);
-        mPasswordView = (EditText) findViewById(R.id.password);
-        mParticulier = (RadioButton) findViewById(R.id.radioButtonParticulier);
-        mPro = (RadioButton) findViewById(R.id.radioButtonPro);
+        mNomView = (TextView) findViewById(R.id.nomAdd);
+        mAdresseView = (TextView) findViewById(R.id.adresseAdd);
+        mVilleView = (TextView) findViewById(R.id.villeAdd);
+        mCategorieSpinner = (Spinner) findViewById(R.id.listType);
+        mDescView = (TextView) findViewById(R.id.descAdd);
 
 
-        Button mEmailRegisterButton = (Button) findViewById(R.id.email_valid_button);
-        mEmailRegisterButton.setOnClickListener(new OnClickListener() {
+        Button mLieuAddButton = (Button) findViewById(R.id.lieu_valid_button);
+        mLieuAddButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 try {
                     Log.e(TAG, "entree attempt Register");
                     attemptRegister();
                     Log.e(TAG, "sortie attempt Register");
-                    Toast.makeText(RegisterActivity.this, "Utilisateur créé avec succès",
+                    Toast.makeText(addLieuActivity.this, "Lieu créé avec succès",
                             Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                    startActivity(intent);
 
                 } catch (Exception e) {
 
-                    Toast.makeText(RegisterActivity.this, "La création a échoué ...",
+                    Toast.makeText(addLieuActivity.this, "La création a échoué ...",
                             Toast.LENGTH_LONG).show();
                     e.printStackTrace();
                 }
@@ -89,16 +85,16 @@ public class RegisterActivity extends AppCompatActivity {
     public void attemptRegister() throws Exception {
         HttpRequest httpRequest = new HttpRequest();
         // Reset errors.
-        mEmailView.setError(null);
-        mPasswordView.setError(null);
-        mPrenomView.setError(null);
         mNomView.setError(null);
+        mAdresseView.setError(null);
+        mVilleView.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString();
-        String password = mPasswordView.getText().toString();
         String nom = mNomView.getText().toString();
-        String prenom = mPrenomView.getText().toString();
+        String adresse = mAdresseView.getText().toString();
+        String ville = mVilleView.getText().toString();
+        String categorie = mCategorieSpinner.toString();
+        String desc = mDescView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
@@ -111,9 +107,9 @@ public class RegisterActivity extends AppCompatActivity {
         }*/
 
         // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
+        if (TextUtils.isEmpty(nom)) {
+            mNomView.setError(getString(R.string.error_field_required));
+            focusView = mNomView;
             cancel = true;
         }
 
@@ -157,33 +153,21 @@ public class RegisterActivity extends AppCompatActivity {
             // Reset errors.
 
             // Store values at the time of the login attempt.
-            String email = mEmailView.getText().toString();
-            String password = mPasswordView.getText().toString();
             String nom = mNomView.getText().toString();
-            String prenom = mPrenomView.getText().toString();
+            String adresse = mAdresseView.getText().toString();
+            String ville = mVilleView.getText().toString();
+            String categorie = mCategorieSpinner.toString();
+            String desc = mDescView.getText().toString();
 
             boolean cancel = false;
             View focusView = null;
-
-            // Check for a valid password, if the user entered one.
-            if (TextUtils.isEmpty(password)) {
-                mPasswordView.setError(getString(R.string.error_invalid_password));
-                focusView = mPasswordView;
-                cancel = true;
-            }
-
-            if (mParticulier.isChecked()) {
-                mCategorie = "particulier";
-            } else if (mPro.isChecked()) {
-                mCategorie = "Professionnel";
-            }
 
             if (cancel) {
                 // There was an error; don't attempt login and focus the first
                 // form field with an error.
                 focusView.requestFocus();
             } else {
-                HttpRequest.register(email, password, prenom, nom, mCategorie);
+                HttpRequest.addLieu(nom,adresse,ville,categorie,desc);
             }
         }
     }

@@ -13,22 +13,21 @@
     <string name="error_invalid_password">Mot de passe invalide</string>
     <string name="error_incorrect_password">Mot de passe incorrect</string>
     <string name="error_field_required">Champs requis</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
-    </string>
-    <string name="title_activity_index">IndexActivity</string>
-    <string name="title_activity_register">SignIn</string>
-
     <string-array name="listType">
-        <item> </item>
+        <item> Catégories </item>
         <item>Administratif</item>
         <item>Commerce</item>
         <item>Restauration</item>
         <item>Loisir - Culture</item>
         <item>Bar</item>
     </string-array>
+    <string name="prompt_adresse">Adresse</string>
+    <string name="prompt_ville">Ville</string>
+    <string name="prompt_desc">Description</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
+    <string name="title_mycityquest">MyCityQuest</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_maps">Map MyCityQuest</string>
 </resources>

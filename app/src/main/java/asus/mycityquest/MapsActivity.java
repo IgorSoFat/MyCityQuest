@@ -42,7 +42,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         map.setMyLocationEnabled(true);
 
         /*
-        Ajouter un marker selon TOUTE les adresse de la BDD 
+        Ajouter un marker selon TOUTES les adresse de la BDD
         LatLng pos = new LatLng(location.getLatitude(),location.getLongitude());
         map.addMarker(new MarkerOptions().position(pos).title("Ma position"));
         */
