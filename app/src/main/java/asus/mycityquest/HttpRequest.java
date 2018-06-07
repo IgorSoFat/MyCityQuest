@@ -44,10 +44,11 @@ public class HttpRequest {
         InputStream in;
         int status = conn.getResponseCode();
 
-        if(status >= HttpURLConnection.HTTP_OK)
+        if (status != HttpURLConnection.HTTP_OK) {
             in = conn.getErrorStream();
-        else
+        } else {
             in = conn.getInputStream();
+        }
 
         BufferedReader rd = new BufferedReader(new InputStreamReader(in));
         String line;
@@ -62,8 +63,15 @@ public class HttpRequest {
         return base + "/" + endpoint;
     }
 
-    public static String getLieu(String ville, String groupe) throws Exception {
+    public static String getLieux(String ville, String groupe) throws Exception {
         String url = base + "searchVilleByNameFilter.php?ville=" + ville + "&categorie=" + groupe;
+        Log.e(TAG, url);
+
+        return get(url);
+    }
+
+    public static String getLieu(Integer id) throws Exception {
+        String url = base + "getLieu.php?id=" + id;
         Log.e(TAG, url);
 
         return get(url);

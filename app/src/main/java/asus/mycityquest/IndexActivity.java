@@ -89,6 +89,26 @@ public class IndexActivity extends AppCompatActivity {
             }
         });
 
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(IndexActivity.this, ShowLieuActivity.class);
+
+                Bundle bundle = new Bundle();
+
+                try {
+                    bundle.putInt("id", adapter.getList().get(i).getInt("id"));
+                } catch (JSONException e) {
+                    bundle.putInt("id", -1);
+                    e.printStackTrace();
+                }
+
+                intent.putExtras(bundle);
+
+                startActivity(intent);
+            }
+        });
+
         // Bouton d'ajout d'un nouveau lieu
         FloatingActionButton addLieu = (FloatingActionButton) findViewById(R.id.addLieuButton);
         //addLieu.bringToFront();
@@ -108,7 +128,7 @@ public class IndexActivity extends AppCompatActivity {
             String result = "";
 
             try {
-                result = HttpRequest.getLieu(query[0], query[1]);
+                result = HttpRequest.getLieux(query[0], query[1]);
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -78,4 +78,8 @@ public class LieuxAdapter extends BaseAdapter {
 
         return lieuView;
     }
+
+    public ArrayList<JSONObject> getList() {
+        return list;
+    }
 }
