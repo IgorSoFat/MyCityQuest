@@ -8,13 +8,14 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 // TEST :>
 // biig : 1234
@@ -36,8 +37,10 @@ public class addLieuActivity extends AppCompatActivity {
     public TextView mNomView;
     public TextView mAdresseView;
     public TextView mVilleView;
+    public String mCategorie;
     public Spinner mCategorieSpinner;
     public TextView mDescView;
+    public String[] adresseParse = new String[2];
 
     public String TAG = "AddLieu ACTIVITY";
 
@@ -47,18 +50,32 @@ public class addLieuActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_addlieu);
 
-        Spinner mCategorieSpinner =(Spinner) findViewById(R.id.listType);
+        final Spinner mCategorieSpinner = (Spinner) findViewById(R.id.listType);
 
-        ArrayAdapter <CharSequence> adapter =
-                ArrayAdapter.createFromResource(this,R.array.listType,android.R.layout.
-                simple_spinner_item); 
+        ArrayAdapter<CharSequence> adapter =
+                ArrayAdapter.createFromResource(this, R.array.listType, android.R.layout.
+                        simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        mCategorieSpinner.setAdapter(adapter);
 
         // Set up the login form.
         mNomView = (TextView) findViewById(R.id.nomAdd);
         mAdresseView = (TextView) findViewById(R.id.adresseAdd);
         mVilleView = (TextView) findViewById(R.id.villeAdd);
-        mCategorieSpinner = (Spinner) findViewById(R.id.listType);
         mDescView = (TextView) findViewById(R.id.descAdd);
+
+        mCategorieSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                mCategorie = (String) mCategorieSpinner.getItemAtPosition(i);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
 
         Button mLieuAddButton = (Button) findViewById(R.id.lieu_valid_button);
@@ -71,6 +88,8 @@ public class addLieuActivity extends AppCompatActivity {
                     Log.e(TAG, "sortie attempt Register");
                     Toast.makeText(addLieuActivity.this, "Lieu créé avec succès",
                             Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(addLieuActivity.this,IndexActivity.class);
+                    startActivity(intent);
 
                 } catch (Exception e) {
 
@@ -93,7 +112,7 @@ public class addLieuActivity extends AppCompatActivity {
         String nom = mNomView.getText().toString();
         String adresse = mAdresseView.getText().toString();
         String ville = mVilleView.getText().toString();
-        String categorie = mCategorieSpinner.toString();
+        String categorie = mCategorie;
         String desc = mDescView.getText().toString();
 
         boolean cancel = false;
@@ -155,8 +174,9 @@ public class addLieuActivity extends AppCompatActivity {
             // Store values at the time of the login attempt.
             String nom = mNomView.getText().toString();
             String adresse = mAdresseView.getText().toString();
+
             String ville = mVilleView.getText().toString();
-            String categorie = mCategorieSpinner.toString();
+            String categorie = mCategorie;
             String desc = mDescView.getText().toString();
 
             boolean cancel = false;
@@ -167,7 +187,7 @@ public class addLieuActivity extends AppCompatActivity {
                 // form field with an error.
                 focusView.requestFocus();
             } else {
-                HttpRequest.addLieu(nom,adresse,ville,categorie,desc);
+                HttpRequest.addLieu(nom, adresse, ville, categorie, desc);
             }
         }
     }

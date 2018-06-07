@@ -1,6 +1,5 @@
 package asus.mycityquest;
 
-import android.nfc.Tag;
 import android.util.Log;
 
 import org.apache.http.HttpResponse;
@@ -12,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 
 /**
  * Created by ASUS on 04/06/2018.
@@ -95,9 +95,9 @@ public class HttpRequest {
     }
 
     public static String addLieu(String nom, String adresse, String ville, String categorie, String descriptif) throws Exception {
-        String url = base + "addLieu.php?Nom=" + nom + "&Adresse=" + adresse + "&Ville=" + ville
-                + "&Categorie=" + categorie + "&Descriptif=" + descriptif;
-        Log.e(TAG,url);
+        String url = base + "addLieu.php?Nom=" + URLEncoder.encode(nom, "UTF-8") + "&Adresse=" + URLEncoder.encode(adresse, "UTF-8") + "&Ville=" + URLEncoder.encode(ville, "UTF-8")
+                + "&Categorie=" + URLEncoder.encode(categorie, "UTF-8") + "&Descriptif=" + URLEncoder.encode(descriptif, "UTF-8");
+        Log.e(TAG, url);
         return get(url);
     }
 }
