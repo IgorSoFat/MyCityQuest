@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <Spinner
-        android:id="@+id/spinnerGroupe"
+        android:id="@+id/listType"
         android:layout_width="174dp"
         android:layout_height="40dp"
         android:layout_marginLeft="20dp"
