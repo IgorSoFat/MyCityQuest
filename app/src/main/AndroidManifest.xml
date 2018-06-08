@@ -48,7 +48,7 @@
 
         <activity
             android:name=".addLieuActivity"
-            android:label="@string/title_mycityquest"></activity>
+            android:label="@string/title_mycityquest"/>
     </application>
 
 </manifest>

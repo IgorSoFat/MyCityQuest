@@ -128,13 +128,18 @@ public class IndexActivity extends AppCompatActivity {
             String result = "";
 
             try {
-                result = HttpRequest.getLieux(query[0], query[1]);
+                if(query[1].equals("Tout")) {
+                    result = HttpRequest.getallLieux(query[0]);
+                } else {
+                    result = HttpRequest.getLieux(query[0], query[1]);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
             return result;
         }
+
 
         @Override
         protected void onPostExecute(String result) {
@@ -155,6 +160,7 @@ public class IndexActivity extends AppCompatActivity {
 
                 adapter = new LieuxAdapter(IndexActivity.this, lieux);
                 list.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
             } catch (JSONException e) {
                 e.printStackTrace();
             }

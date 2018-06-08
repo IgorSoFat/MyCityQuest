@@ -14,10 +14,11 @@
     <string name="error_incorrect_password">Mot de passe incorrect</string>
     <string name="error_field_required">Champs requis</string>
     <string-array name="listType">
-        <item>Administratif</item>
+        <item>Tout</item>
+        <item>Administration</item>
         <item>Commerce</item>
         <item>Restauration</item>
-        <item>Loisir - Culture</item>
+        <item>Loisir et Culture</item>
         <item>Bar</item>
     </string-array>
     <string name="prompt_adresse">Adresse</string>

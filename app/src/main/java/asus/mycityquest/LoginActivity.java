@@ -12,6 +12,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 // TEST :>
 // biig : 1234
 
@@ -40,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         mPasswordView = (EditText) findViewById(R.id.password);
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+        final Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -50,7 +53,6 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(LoginActivity.this, IndexActivity.class);
                     startActivity(intent);
-
                 } catch (Exception e) {
                     Toast.makeText(LoginActivity.this, "La connexion a échoué ...",
                             Toast.LENGTH_LONG).show();
@@ -137,9 +139,8 @@ public class LoginActivity extends AppCompatActivity {
          * If there are form errors (invalid email, missing fields, etc.), the
          * errors are presented and no actual login attempt is made.
          */
-        public void attemptRegister() throws Exception {
+        public void attemptLogin() throws Exception {
             HttpRequest httpRequest = new HttpRequest();
-            // Reset errors.
 
             // Store values at the time of the login attempt.
             String email = mEmailView.getText().toString();
@@ -149,7 +150,7 @@ public class LoginActivity extends AppCompatActivity {
             View focusView = null;
 
             // Check for a valid password, if the user entered one.
-            if (!TextUtils.isEmpty(password)) {
+            if (TextUtils.isEmpty(password)) {
                 mPasswordView.setError(getString(R.string.error_invalid_password));
                 focusView = mPasswordView;
                 cancel = true;
@@ -160,7 +161,7 @@ public class LoginActivity extends AppCompatActivity {
                 // form field with an error.
                 focusView.requestFocus();
             } else {
-                HttpRequest.connecter(email, password);
+                HttpRequest.connecter(email,password);
             }
         }
     }

@@ -93,7 +93,9 @@ public class ShowLieuActivity extends AppCompatActivity implements OnMapReadyCal
 
             map.addMarker(new MarkerOptions()
                 .position(new LatLng(adresse.getLatitude(), adresse.getLongitude()))
-                .title("Marker"));
+                .title(nom.getText().toString()));
+
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(adresse.getLatitude(), adresse.getLongitude()),10));
 
             map.animateCamera(
                 CameraUpdateFactory.newLatLngZoom(
